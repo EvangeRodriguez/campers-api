@@ -1,16 +1,10 @@
 package com.backend.springproject.camper;
-
-
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/camper")
 public class CamperController {
 
-    @GetMapping
-    public String getCampers(){
-        return "Hector Senior";
-    }
-
-
+    @GetMapping("/camper")
+    public  String index() { return "camper /GET";}
 }
