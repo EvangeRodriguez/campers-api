@@ -11,10 +11,10 @@ import lombok.NoArgsConstructor;
 import java.util.Set;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
+//@AllArgsConstructor
+//@NoArgsConstructor
 @Entity
-@Table
+//@Table
 public class Camper {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
