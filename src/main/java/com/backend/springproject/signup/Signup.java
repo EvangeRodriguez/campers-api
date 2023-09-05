@@ -1,7 +1,5 @@
 package com.backend.springproject.signup;
 
-
-
 import com.backend.springproject.Activity.Activity;
 import com.backend.springproject.camper.Camper;
 import jakarta.persistence.*;
@@ -11,12 +9,16 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
+
+import jakarta.persistence.*;
+
+import lombok.Data;
+
 @Entity
-@Table
+@Data
+
 public class Signup {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -29,11 +31,18 @@ public class Signup {
     @JoinColumn(name = "activity_id")
     private Activity activity;
 
-    @NotNull(message = "Camper ID is required")
-    @Column(name = "camper_id", insertable = false, updatable = false)
-    private Long camperId;
+    private Integer time;
 
-    @NotNull(message = "Activity ID is required")
-    @Column(name = "activity_id", insertable = false, updatable = false)
-    private Long activityId;
+
+    public Signup() {
+    }
+    public Signup(Long id, Camper camper, Activity activity, Integer time) {
+        this.id = id;
+        this.camper = camper;
+        this.activity = activity;
+        this.time = time;
+
+    }
+
+
 }

@@ -3,35 +3,40 @@ package com.backend.springproject.Activity;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 public class ActivityController {
     @Autowired
+    private ActivityService activityService;
+    @Autowired
     private ModelMapper modelMapper;
-    @Autowired
-    private final ActivityService activityService;
-    @Autowired
-    private ActivityRepository activityRepositoryRepository;
-    public ActivityController(ActivityService activityService) {
-        this.activityService = activityService;
-    }
 
+    @GetMapping("/activities")
+    public ResponseEntity<List<ActivityDTO>> getAllActivities() {
+        List<Activity> activities = activityService.getAllActivities();
+        List<ActivityDTO> activityDTOs = activities.stream()
+                .map(activity -> modelMapper.map(activity, ActivityDTO.class))
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(activityDTOs);
+    }
 
     @PostMapping("/activity")
-    public ResponseEntity<ActivityDTO> registerActivity (@Valid @RequestBody ActivityDTO activityDTO){
-        try {
+    public ResponseEntity<Activity> createActivity(@Valid @RequestBody ActivityDTO activityDTO) {
+        Activity activityRequest = modelMapper.map(activityDTO, Activity.class);
+        Activity _activity = activityService.createActivity(activityRequest);
+        return ResponseEntity.ok().body(_activity);
 
-            Activity activityRequest = modelMapper.map(activityDTO, Activity.class);
-            Activity _activity = activityService.addActivity(activityRequest);
-            ActivityDTO activityResponse = modelMapper.map(_activity, ActivityDTO.class);
-
-            return ResponseEntity.ok().body(activityResponse);
-       } catch (Exception e){
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
     }
 
+    @DeleteMapping("/activity/{id}")
+    public ResponseEntity<Void> deleteActivity(@PathVariable Long id) {
+        activityService.deleteActivity(id);
+        return ResponseEntity.noContent().build();
+    }
 }
